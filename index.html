@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <!-- Adaptation -->
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <!-- Font awesome ikon -->
+   <script src="https://kit.fontawesome.com/3d8e44fa38.js" crossorigin="anonymous"></script>
+   <title>Slaider</title>
+</head>
+<style>
+   /*Обнуление*/
+   * {
+      padding: 0;
+      margin: 0;
+      border: 0;
+   }
+
+   *,
+   *:before,
+   *:after {
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+   }
+
+   :focus,
+   :active {
+      outline: none;
+   }
+
+   a:focus,
+   a:active {
+      outline: none;
+   }
+
+   nav,
+   footer,
+   header,
+   aside {
+      display: block;
+   }
+
+   html,
+   body {
+      height: 100%;
+      width: 100%;
+      font-size: 100%;
+      line-height: 1;
+      font-size: 14px;
+      -ms-text-size-adjust: 100%;
+      -moz-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+   }
+
+   input,
+   button,
+   textarea {
+      font-family: inherit;
+   }
+
+   input::-ms-clear {
+      display: none;
+   }
+
+   button {
+      cursor: pointer;
+   }
+
+   button::-moz-focus-inner {
+      padding: 0;
+      border: 0;
+   }
+
+   a,
+   a:visited {
+      text-decoration: none;
+   }
+
+   a:hover {
+      text-decoration: none;
+   }
+
+   ul li {
+      list-style: none;
+   }
+
+   img {
+      vertical-align: top;
+   }
+
+   h1,
+   h2,
+   h3,
+   h4,
+   h5,
+   h6 {
+      font-size: inherit;
+      font-weight: inherit;
+   }
+
+   /*--------------------*/
+
+   .flex-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+   }
+
+   .slider-wrapper {
+      max-width: 100%;
+      height: 550px;
+      position: relative;
+      box-shadow: 10px 10px 44px -10px rgba(0, 0, 0, 0.75);
+      transition: .3s linear .2s;
+   }
+
+   #btn-prev,
+   #btn-next {
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
+      color: white;
+      font-size: 50px;
+      opacity: 0.5;
+      cursor: pointer;
+      transition: opacity .2s ease-in-out;
+   }
+
+   #btn-prev:hover,
+   #btn-next:hover {
+      opacity: 0.8;
+   }
+
+   #btn-prev {
+      left: 5px;
+   }
+
+   #btn-next {
+      right: 5px;
+   }
+
+   .slide {
+      width: 100%;
+      height: 100%;
+      display: none;
+   }
+
+   .slide.active {
+      display: block;
+   }
+
+   .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+   }
+
+   .dots-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+   }
+
+   .dot.active {
+      background-color: #000;
+   }
+
+   .dots-wrapper span {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background-color: gray;
+      margin-right: 10px;
+      cursor: pointer;
+   }
+
+   .dots-wrapper span:last-child {
+      margin-right: 0;
+   }
+</style>
+
+<body>
+   <div class="container">
+      <div class="flex-wrapper">
+         <div class="slider-wrapper">
+            <div class="slide active">
+               <img src="img/img_1.jpg" alt="">
+            </div>
+            <div class="slide">
+               <img src="img/img_2.jpg" alt="">
+            </div>
+            <div class="slide">
+               <img src="img/img_3.jpg" alt="">
+            </div>
+            <div class="slide">
+               <img src="img/img_4.jpg" alt="">
+            </div>
+            <div class="slide">
+               <img src="img/img_5.jpg" alt="">
+            </div>
+            <div id="btn-prev"><i class="fas fa-chevron-left"></i></div>
+            <div id="btn-next"><i class="fas fa-chevron-right"></i></div>
+         </div>
+      </div>
+      <div class="dots-wrapper">
+         <span class="dot active"></span>
+         <span class="dot"></span>
+         <span class="dot"></span>
+         <span class="dot"></span>
+         <span class="dot"></span>
+      </div>
+   </div>
+
+   <script>
+
+      function Slaider(index) {
+         const prev = document.getElementById('btn-prev');
+         const next = document.getElementById('btn-next');
+         const slides = document.querySelectorAll('.slide');
+         const dots = document.querySelectorAll('.dot');
+
+         //let index = 0;
+
+         function prepereSlaider(index) {
+            activeSlide(index);
+            activeDot(index);
+         }
+
+         function activeSlide(index) {
+            slides.forEach(item => {
+               item.classList.remove('active');
+            });
+            slides[index].classList.add('active');
+         }
+
+         function activeDot(index) {
+            dots.forEach(item => {
+               item.classList.remove('active');
+            });
+            dots[index].classList.add('active');
+         }
+
+         function nextSlide() {
+            if (index == slides.length - 1) {
+               index = 0;
+               prepereSlaider(index);
+            } else {
+               index++;
+               prepereSlaider(index);
+            }
+         }
+
+         function prevSlide() {
+            if (index == 0) {
+               index = slides.length - 1;
+               prepereSlaider(index);
+            } else {
+               index--;
+               prepereSlaider(index);
+            }
+         }
+
+         dots.forEach((item, indexDot) => {
+            item.addEventListener('click', (e) => {
+               index = indexDot;
+               prepereSlaider(indexDot);
+               //clearInterval(interval);
+            });
+         });
+
+         next.addEventListener('click', nextSlide);
+         prev.addEventListener('click', prevSlide);
+         // next.addEventListener('click',()=>clearInterval(interval));
+         // prev.addEventListener('click',()=>clearInterval(interval));
+
+         const interval = setInterval(nextSlide, 5000);
+      }
+      Slaider(0);
+   </script>
+</body>
+</html>
